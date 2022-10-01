@@ -52,5 +52,56 @@ namespace MvcOnlineTicariOtomasyon.Controllers
             c.SaveChanges();
             return RedirectToAction("Index");
         }
+        public ActionResult SatisGetir(int id)
+        {
+            List<SelectListItem> deger1 = (from x in c.Uruns.ToList()
+                                           select new SelectListItem
+                                           {
+                                               Text = x.UrunAd,
+                                               Value = x.Urunid.ToString()
+                                           }
+                                        ).ToList();
+            ViewBag.dgr1 = deger1;
+            List<SelectListItem> deger2 = (from x in c.Carilers.ToList()
+                                           select new SelectListItem
+                                           {
+                                               Text = x.CariAd + " " + x.CariSoyad,
+                                               Value = x.Cariid.ToString()
+                                           }
+                                       ).ToList();
+            ViewBag.dgr2 = deger2;
+            List<SelectListItem> deger3 = (from x in c.Personels.ToList()
+                                           select new SelectListItem
+                                           {
+                                               Text = x.PersonelAd + " " + x.PersonelSoyad,
+                                               Value = x.Personelid.ToString()
+                                           }
+                                    ).ToList();
+            ViewBag.dgr3 = deger3;
+
+
+            var urundeger = c.SatisHarekets.Find(id);
+            return View("SatisGetir", urundeger);
+        }
+        public ActionResult SatisGuncelle(SatisHareket p)
+        {
+            var deger = c.SatisHarekets.Find(p.Satisid);
+            deger.Urunid = p.Urunid;
+            deger.Cariid = p.Cariid;
+            deger.Personelid = p.Personelid;
+            deger.Adet = p.Adet;
+            deger.Fiyat = p.Fiyat;
+            deger.ToplamTutar = p.ToplamTutar;
+            deger.Tarih = p.Tarih;
+            c.SatisHarekets.Add(p);
+            c.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
+        public ActionResult SatisDetay(int id)
+        {
+            var degerler=c.SatisHarekets.Where(x=>x.Personelid==id).ToList();
+            return View(degerler);
+        }
     }
 }
