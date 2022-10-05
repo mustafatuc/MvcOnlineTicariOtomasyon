@@ -49,5 +49,26 @@ namespace MvcOnlineTicariOtomasyon.Controllers
             //ViewBag.d16 = deger16;
             return View();
         }
+        public ActionResult KolayTablolar()
+        {
+            var sorgu = from x in c.Carilers
+                        group x by x.CariSehir into g
+                        select new SinifGrup
+                        {
+                            sehir = g.Key,
+                            sayi = g.Count()
+                        };
+            return View(sorgu.ToList());
+        }
+        public PartialViewResult Partial1()
+        {
+            var sorgu2=from x in c.Personels group x by x.Departmanid into g
+                       select new SinifGrup2
+                       {
+                           Departman = g.Key,
+                           sayi = g.Count()
+                       };
+            return PartialView(sorgu2.ToList());
+        }
     }
 }
